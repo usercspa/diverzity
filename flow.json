@@ -1,0 +1,398 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "welcome",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "welcome",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "getName",
+          "event": "keypress"
+        },
+        {
+          "next": "record_voicemail",
+          "event": "speech"
+        },
+        {
+          "next": "welcome",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 126,
+          "y": 198
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Good day, would you like to report a challenge? Please press any key to continue. To leave a message, please say message.",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "getName",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "getName",
+          "event": "keypress"
+        },
+        {
+          "next": "Webhook",
+          "event": "speech"
+        },
+        {
+          "next": "getName",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 140,
+          "y": 460
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "What's your name? You could say anonymous if you don't want to be identified",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Webhook",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "getTitle",
+          "event": "success"
+        },
+        {
+          "next": "getTitle",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -230,
+          "y": 670
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://diverzity-2803a-default-rtdb.firebaseio.com/"
+      }
+    },
+    {
+      "name": "Webhook2",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "say_play_1",
+          "event": "success"
+        },
+        {
+          "next": "say_play_1",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1050,
+          "y": 390
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://diverzity-2803a-default-rtdb.firebaseio.com/"
+      }
+    },
+    {
+      "name": "record_voicemail",
+      "type": "record-voicemail",
+      "transitions": [
+        {
+          "next": "Webhook2",
+          "event": "recordingComplete"
+        },
+        {
+          "event": "noAudio"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "transcribe": true,
+        "offset": {
+          "x": 661,
+          "y": 284
+        },
+        "trim": "trim-silence",
+        "play_beep": "true",
+        "timeout": 5,
+        "max_length": 3600
+      }
+    },
+    {
+      "name": "say_play_1",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 680,
+          "y": 630
+        },
+        "loop": 1,
+        "say": "All recorded. Goodbye!"
+      }
+    },
+    {
+      "name": "Webhook3",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "getKeywords",
+          "event": "success"
+        },
+        {
+          "next": "getKeywords",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -250,
+          "y": 1080
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://diverzity-2803a-default-rtdb.firebaseio.com/"
+      }
+    },
+    {
+      "name": "getTitle",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "getTitle",
+          "event": "keypress"
+        },
+        {
+          "next": "Webhook3",
+          "event": "speech"
+        },
+        {
+          "next": "getTitle",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 140,
+          "y": 830
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Could you give a title to your challenge for easy identification?",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Webhook4",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "getDescription",
+          "event": "success"
+        },
+        {
+          "next": "getDescription",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -250,
+          "y": 1400
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://diverzity-2803a-default-rtdb.firebaseio.com/"
+      }
+    },
+    {
+      "name": "getKeywords",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "getKeywords",
+          "event": "keypress"
+        },
+        {
+          "next": "Webhook4",
+          "event": "speech"
+        },
+        {
+          "next": "getKeywords",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 140,
+          "y": 1190
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Could you suggest some keywords to your challenge for easy identification?",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Webhook5",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "Ask",
+          "event": "success"
+        },
+        {
+          "next": "Ask",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -250,
+          "y": 1700
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://diverzity-2803a-default-rtdb.firebaseio.com/"
+      }
+    },
+    {
+      "name": "getDescription",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "getDescription",
+          "event": "keypress"
+        },
+        {
+          "next": "Webhook5",
+          "event": "speech"
+        },
+        {
+          "next": "getDescription",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 140,
+          "y": 1500
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Could you describe your challenge in a few sentences?",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Ask",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "record_voicemail",
+          "event": "keypress"
+        },
+        {
+          "next": "Goodbye",
+          "event": "speech"
+        },
+        {
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 150,
+          "y": 1800
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "All noted. Do you want to leave us a message? Please any keys to leave a message.",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Goodbye",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 150,
+          "y": 2080
+        },
+        "loop": 1,
+        "say": "Have a nice day! Goodbye!"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
