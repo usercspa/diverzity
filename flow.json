@@ -355,6 +355,7 @@
           "event": "speech"
         },
         {
+          "next": "Goodbye",
           "event": "timeout"
         }
       ],
