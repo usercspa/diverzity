@@ -37,3 +37,72 @@
   font-weight: bold;
   margin: auto;
 }
+.illustration {
+  display: flex;
+}
+img {
+  position: relative;
+}
+.avatar {
+  border-radius: 50%;
+  width: 50px;
+}
+
+.div80 p {
+  font-weight: 600;
+}
+.overview {
+  padding-top: 30px;
+}
+
+.header p {
+  font-size: 50px;
+}
+
+.mybutton {
+  background: #fa743f;
+  border-radius: 10px;
+  color: white;
+  border-color: #fa743f;
+  font-size: 30px;
+  text-decoration: none;
+}
+
+.mybutton a {
+  text-decoration: none;
+  color: white;
+}
+.div80 {
+  width: 90%;
+}
+.mybutton a:hover {
+  text-decoration: none;
+  color: white;
+}
+.mybutton:hover {
+  background: #fa743f;
+  border-color: #fa5717;
+  text-decoration: none;
+  color: white;
+  text-decoration: none;
+  transform: scale(1.02);
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+.icons {
+  color: orange;
+
+  padding: 5px;
+  margin-left: 15px;
+  margin-right: 10px;
+}
+.material-icons {
+  font-size: 28px !important;
+}
